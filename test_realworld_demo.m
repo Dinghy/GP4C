@@ -36,7 +36,7 @@ end
 % training and testing on each part
 for is = 1:options.sampleRepeat
     [dataFull,strfileName] = generateRealTest(options);
-    for ip = 1:1
+    for ip = 1:nPart
         fprintf('Dataset %d\t Part %d\t Sample %d\n',idataset,ip,is);
         data = dataFull{ip};
         data.nU = data.nTrain;
@@ -80,5 +80,5 @@ for is = 1:options.sampleRepeat
     end
     fprintf('\n');
 end
-save(strFileSave{idataset},'resFull','resModel','data','options');
+save(strFileSave{idataset},'resFull','resModel','dataFull','options');
 

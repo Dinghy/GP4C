@@ -10,12 +10,21 @@ addpath(genpath('.\.'));
 load('RealBladderDemo.mat');
 resA = resFull{1}{1};resA.model = resModel{1,1};
 resB = resFull{1}{3};resB.model = resModel{1,3};
+data = dataFull{1};
 options.plotDemo = 1;options.dataWeight = 0;
 [fig1,fig2,fig3] = plotDataModel(data,resA,resB,options);
 printFig(fig1,'result_plot\DemoPanel');     % Figure 1
 printFig(fig2,'result_plot\TestBladder');   % Figure 7
 printFig(fig3,'result_plot\DemoIntensity'); % Figure 2
+%% Comparison
+data = dataFull{2};
+resA = resFull{2}{1};resA.model = resModel{2,1};
+resB = resFull{2}{3};resB.model = resModel{2,3};
+options.plotDemo = 1;options.dataWeight = 0;
+[fig4,fig5,fig6] = plotDataModel(data,resA,resB,options);
+printFig(fig3,'result_plot\DemoIntensityAB'); % Figure 2
 %% GP4CW
+data = dataFull{1};
 resA = resFull{1}{2};resA.model = resModel{1,2};
 resB = resFull{1}{3};resB.model = resModel{1,3};
 options.plotDemo = 1;options.dataWeight = 1;

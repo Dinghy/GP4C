@@ -14,15 +14,21 @@ else
             data.fBasic = @(x)7*(x>=0 & x<10)+2*(x>=10 & x<20)+7*(x>=20 & x<30)...
                 +2*(x>=30 & x<40)+7*(x>=40 & x<50)+2*(x>=50 & x<60);
             data.fileName = 'CenPL';
-        case 3
+        case 2
             data.fBasic = @(x)10*exp(-x/15)+5*exp(-(x-35).^2/100);
             data.fileName = 'CenExpNormal';
-        case 2
-            data.fBasic = @(x)0.2*(1+sin(2*pi/30*x));
+        case 3
+            data.fBasic = @(x)4*(1+sin(2*pi/20*x));
             data.fileName = 'CenSine';
         case 4
             data.fBasic = @(x)5*exp(-(x-30).^2/200);
             data.fileName = 'CenLinear';
+        case 6
+            data.fBasic = @(x) 100 * normpdf(x, 0.2, 0.05) + 80 * normpdf(x, 0.4, 0.03) + ...
+                 60 * normpdf(x, 0.5, 0.03) + 40 * normpdf(x, 0.6, 0.03) + ...
+                 20 * normpdf(x, 0.7, 0.03);
+            data.XEnd = 1;
+            data.fileName = 'CenNew';
         case 5 % 2-dimensional data
             data = generate2D(options);
             return
@@ -35,9 +41,10 @@ data.nTrain = data.nU;  % training number
 data.nTest = options.censorExperiment/2; % testing number
 %% generate one sequence
 nfMax = max(data.fBasic(vT))+2;
-data.censor = cell(1,data.nU);      % censored training data set
-data.train = cell(1,data.nU);       % complete training data set
-data.centest = cell(1,data.nTest);  % censored testing data set
+data.censor = cell(1,data.nU);      % censored train data set
+data.train = cell(1,data.nU);       % complete train data set
+data.test = cell(1,data.nU);       % complete test data set
+data.centest = cell(1,data.nTest);  % censored test data set
 %% equally censored all points 
 for u = 1:options.censorExperiment
     ir = rand();
@@ -79,6 +86,7 @@ for u = 1:options.censorExperiment
         data.train{u}.X = data.raw';
     else             % testing set
         data.centest{u-data.nU} = centmp;
+        data.test{u-data.nU}.X = data.raw';
     end
 end
 %% plotting
@@ -110,7 +118,6 @@ if options.dataPlot == 1
     printFig(fig,'.\result_plot\CensorAll');
 end
 end
-
 
 function vF = linear(vX,f)
 % perform linear interpolation using f.x, f.y
